@@ -6,7 +6,7 @@ class MainScene extends Phaser.Scene {
   KeyPrc: KeyProcessor;
 
   constructor() {
-    super({ key: 'myscene' });
+    super({ key: 'mainscene' });
     this.KeyPrc = new KeyProcessor(this);
   }
 
@@ -18,7 +18,8 @@ class MainScene extends Phaser.Scene {
     this.load.image('red', 'assets/red.png');
 
     this.KeyPrc.attachEvent().addListner((keyCode: number, pressShift: boolean) => {
-      console.log(`${keyCode} shift=${pressShift}`);
+      const asciiCode = this.KeyPrc.downKeyCodeToAscii(keyCode, pressShift);
+      console.log(`${keyCode}: ${String.fromCharCode(asciiCode)}`);
     });
   }
 
