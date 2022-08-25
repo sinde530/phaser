@@ -97,6 +97,7 @@ class ImgHolder {
       94: chr94,
       95: chr95,
       96: chr96,
+      123: chr123,
       124: chr124,
       125: chr125,
       126: chr126,

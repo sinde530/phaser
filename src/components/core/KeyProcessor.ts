@@ -112,6 +112,16 @@ class KeyProcessor {
     }
     return ret;
   }
+
+  getRandomKey() {
+    // RND 가 무엇?.. interferInRange?..
+    const keys = Phaser.Math.RND.integerInRange(1, 2) == 1 ? WITH_SHIFT_KEYS : NON_SHIFT_KEYS;
+    return keys[Phaser.Math.RND.integerInRange(0, keys.length - 1)];
+  }
+
+  getRandomKeyCode(): string {
+    return String(this.getRandomKey().charCodeAt(0));
+  }
 }
 
 export default KeyProcessor;
