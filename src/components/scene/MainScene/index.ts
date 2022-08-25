@@ -1,30 +1,21 @@
 import Phaser from 'phaser';
 
 import KeyProcessor from '../../core/KeyProcessor';
-
-import imgSky from '../../../../assets/sky.png';
-import imgLine from '../../../../assets/line.png';
-import imgLogo from '../../../../assets/phaser-logo.png';
-import imgRed from '../../../../assets/red.png';
-import imgSenkan from '../../../../assets/war_senkan_man.png';
+import ImgHolder from '../../core/ImgHolder';
 
 class MainScene extends Phaser.Scene {
   KeyPrc: KeyProcessor;
+  images: ImgHolder;
 
   constructor() {
     super({ key: 'mainscene' });
     this.KeyPrc = new KeyProcessor(this);
+    this.images = new ImgHolder(this);
   }
 
   preload() {
     // this.load.setBaseURL('https://labs.phaser.io');
-
-    this.load.image('sky', imgSky);
-    this.load.image('logo', imgLogo);
-    this.load.image('red', imgRed);
-    this.load.image('line', imgLine);
-
-    this.load.image('senkan', imgSenkan);
+    this.images.load();
 
     this.KeyPrc.attachEvent().addListner((keyCode: number, pressShift: boolean) => {
       const asciiCode = this.KeyPrc.downKeyCodeToAscii(keyCode, pressShift);
