@@ -2,12 +2,15 @@ import Phaser from 'phaser';
 
 import KeyProcessor from '../../core/KeyProcessor';
 import ImgHolder from '../../core/ImgHolder';
+import Bullet from '../../core/Bullet';
 
 class MainScene extends Phaser.Scene {
   KeyPrc: KeyProcessor;
   images: ImgHolder;
   walls?: Phaser.Physics.Arcade.StaticGroup;
   chrGroup?: Phaser.Physics.Arcade.Group;
+  bullets?: Phaser.Physics.Arcade.Group;
+  senkan?: Phaser.Physics.Arcade.Image;
 
   constructor() {
     super({ key: 'mainscene' });
@@ -20,17 +23,26 @@ class MainScene extends Phaser.Scene {
     this.images.load();
     this.walls = this.physics.add.staticGroup();
     this.chrGroup = this.physics.add.group();
+    this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
 
     this.KeyPrc.attachEvent().addListner((keyCode: number, pressShift: boolean) => {
-      const asciiCode = this.KeyPrc.downKeyCodeToAscii(keyCode, pressShift);
-      console.log(`${keyCode}: ${String.fromCharCode(asciiCode)}`);
+      this.chrGroup?.children.iterate((enemy) => {
+        if (this.isTarget(enemy, keyCode, pressShift)) {
+          const bullet = this.bullets?.get().setActive(true).setVisible(true);
+
+          if (bullet) {
+            bullet.fire(this.senkan, enemy);
+          }
+        }
+      });
     });
   }
 
   create() {
     this.add.image(400, 300, 'sky');
     this.add.image(400, 600, 'line');
-    this.add.image(400, 550, 'senkan').setScale(0.7);
+    this.senkan = this.physics.add.image(400, 550, 'senkan').setScale(0.7);
+
     this.walls!.create(-15, 300, 'wall');
     this.walls!.create(815, 300, 'wall');
 
@@ -38,31 +50,21 @@ class MainScene extends Phaser.Scene {
       this.createEnemy();
     }
     this.physics.add.collider(this.chrGroup!, this.walls!);
-
-    // const particles = this.add.particles('red');
-
-    // const emitter = particles.createEmitter({
-    //   speed: 100,
-    //   scale: { start: 1, end: 0 },
-    //   blendMode: 'ADD',
-    // });
-
-    // const logo = this.physics.add.image(400, 100, 'logo');
-
-    // logo.setVelocity(100, 200);
-    // logo.setBounce(1, 1);
-    // logo.setCollideWorldBounds(true);
-
-    // emitter.startFollow(logo);
   }
+
   createEnemy() {
     const code = this.KeyPrc.getRandomKeyCode();
     const enemy = this.chrGroup!.create(Phaser.Math.Between(0, 800), -18, code).setScale(0.3);
+
     enemy.setName(code);
     enemy.setBounce(1);
     enemy.setCollideWorldBounds(false, 1, 0);
     enemy.setVelocity(Phaser.Math.Between(-80, 80), 25);
     enemy.allowGravity = false;
+  }
+
+  isTarget(enemy: Phaser.GameObjects.GameObject, keyCode: number, pressShift: boolean) {
+    return parseInt(enemy.name) === this.KeyPrc.downKeyCodeToAscii(keyCode, pressShift);
   }
 }
 
