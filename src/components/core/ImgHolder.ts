@@ -9,6 +9,9 @@ import imgBullet from '../../../assets/star.png';
 import imgSenkan from '../../../assets/war_senkan_man.png';
 import imgTitle from '../../../assets/title.png';
 import imgStart from '../../../assets/start_easy.png';
+import imgButtonRetry from '../../../assets/button-retry.png';
+import imgButtonTitle from '../../../assets/button-title.png';
+import imgGameOver from '../../../assets/gameover.png';
 
 import chr33 from '../../../assets/char/33.png';
 import chr35 from '../../../assets/char/35.png';
@@ -65,6 +68,9 @@ class ImgHolder {
       red: imgRed,
       line: imgLine,
       bullet: imgBullet,
+      button_retry: imgButtonRetry,
+      button_title: imgButtonTitle,
+      gameover: imgGameOver,
       // senkan: imgSenkan,
       33: chr33,
       34: chr34,
