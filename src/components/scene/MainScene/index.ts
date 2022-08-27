@@ -37,21 +37,21 @@ class MainScene extends Phaser.Scene {
   }
 
   init(data: any) {
+    this.st = this.initStatus();
     this.images = data.images;
-    console.log('data.images', data.images);
+    this.st!.speed = data.speed;
   }
 
   preload() {
     // this.load.setBaseURL('https://labs.phaser.io');
     this.images!.loadMain(this);
-    this.st = this.initStatus();
     this.walls = this.physics.add.staticGroup();
     this.chrs = this.physics.add.group();
     this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
 
     this.KeyPrc.attachEvent().addListner((key: string, pressShift: boolean) => {
       this.chrs?.children.iterate((enemy) => {
-        if ((enemy.name, key)) {
+        if (this.isTarget(enemy.name, key)) {
           const bullet = this.bullets?.get().setActive(true).setVisible(true);
 
           if (bullet) {
@@ -128,7 +128,7 @@ class MainScene extends Phaser.Scene {
   createEnemy() {
     const key = this.KeyPrc.getRandomKey();
     const enemy = this.chrs!.create(
-      Phaser.Math.Between(30, -770),
+      Phaser.Math.Between(30, 770),
       -13,
       String(key.charCodeAt(0))
     ).setScale(0.3);
@@ -138,8 +138,17 @@ class MainScene extends Phaser.Scene {
       .setName(key)
       .setBounce(1)
       .setCollideWorldBounds(false, 1, 0)
-      .setVelocity(Phaser.Math.Between(-80, 80), this.st!.speed);
+      .setVelocity(Phaser.Math.Between(10, 80), this.st!.speed);
     enemy.setVisible(true).setActive(true);
+  }
+
+  isTarget(name: string, key: string) {
+    if (name === '\\') {
+      if (!window.navigator.userAgent.includes('Win')) {
+        return '¥' === key;
+      }
+    }
+    return name === key;
   }
 
   update() {
