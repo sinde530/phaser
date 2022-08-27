@@ -8,24 +8,23 @@ interface GameStatus {
   score: number;
   speed: number;
   maxEnemy: number;
+  gameOver: boolean;
 }
 
 class MainScene extends Phaser.Scene {
   KeyPrc: KeyProcessor;
-  images: ImgHolder;
+  images?: ImgHolder;
   walls?: Phaser.Physics.Arcade.StaticGroup;
-  chrGroup?: Phaser.Physics.Arcade.Group;
   bullets?: Phaser.Physics.Arcade.Group;
   chrs?: Phaser.Physics.Arcade.Group;
-  senkan?: Phaser.Physics.Arcade.Image;
-  st: GameStatus;
+  senkan?: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  line?: Phaser.Physics.Arcade.Image;
+  st?: GameStatus;
   labelScore?: Phaser.GameObjects.Text;
 
   constructor() {
     super({ key: 'mainscene' });
     this.KeyPrc = new KeyProcessor(this);
-    this.images = new ImgHolder(this);
-    this.st = this.initStatus();
   }
 
   initStatus(): GameStatus {
@@ -33,12 +32,19 @@ class MainScene extends Phaser.Scene {
       score: 0,
       speed: 20,
       maxEnemy: 1,
+      gameOver: false,
     };
+  }
+
+  init(data: any) {
+    this.images = data.images;
+    console.log('data.images', data.images);
   }
 
   preload() {
     // this.load.setBaseURL('https://labs.phaser.io');
-    this.images.load();
+    this.images!.loadMain(this);
+    this.st = this.initStatus();
     this.walls = this.physics.add.staticGroup();
     this.chrs = this.physics.add.group();
     this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
@@ -53,8 +59,9 @@ class MainScene extends Phaser.Scene {
             this.physics.add.overlap(enemy, bullet, (enemy: any, bullet: any) => {
               if (enemy.active === true && bullet.active === true) {
                 enemy.destroy();
-                this.st.score += 10;
-                this.labelScore!.setText(`Score: ${this.st.score}`);
+                this.st!.score += 10;
+                this.st!.maxEnemy = Math.floor(this.st!.score / 100) + 1;
+                this.labelScore!.setText(`Score: ${this.st!.score}`);
               }
             });
           }
@@ -65,8 +72,8 @@ class MainScene extends Phaser.Scene {
 
   create() {
     this.add.image(400, 300, 'sky');
-    this.add.image(400, 600, 'line');
-    this.senkan = this.physics.add.image(400, 550, 'senkan').setScale(0.7);
+    this.line = this.physics.add.image(400, 600, 'line');
+    this.senkan = this.physics.add.sprite(400, 550, 'senkan').setScale(0.7);
 
     this.walls!.create(-15, 300, 'wall');
     this.walls!.create(815, 300, 'wall');
@@ -78,10 +85,44 @@ class MainScene extends Phaser.Scene {
       fontFamily: 'Roboto',
     });
 
-    // while (this.chrs!.countActive(true) < 4) {
-    //   this.createEnemy();
-    // }
     this.physics.add.collider(this.chrs!, this.walls!);
+    this.physics.add.overlap(this.chrs!, this.line!, () => {
+      this.gameover();
+    });
+    this.anims.create({
+      key: 'senkan_death',
+      frames: this.anims.generateFrameNumbers('senkan', { start: 0, end: 6 }),
+      frameRate: 15,
+    });
+  }
+
+  gameover() {
+    this.senkan?.anims.play('senkan_death');
+    this.st!.gameOver = true;
+    this.time.delayedCall(1000, () => {
+      this.add.image(400, 300, 'gameover');
+      this.add
+        .text(385, 285, String(this.st!.score), {
+          fontSize: '30px',
+          fontStyle: 'bold',
+          color: '#547EFF',
+          fontFamily: 'Roboto',
+        })
+        .setOrigin(0);
+      this.add
+        .image(300, 400, 'button_retry')
+        .setInteractive()
+        .once('pointerup', () => {
+          this.scene.restart();
+        });
+      this.add
+        .image(520, 400, 'button_title')
+        .setInteractive()
+        .once('pointerup', () => {
+          this.scene.start('titlescene');
+        });
+    });
+    this.physics.pause();
   }
 
   createEnemy() {
@@ -91,17 +132,23 @@ class MainScene extends Phaser.Scene {
     enemy.setName(code);
     enemy.setBounce(1);
     enemy.setCollideWorldBounds(false, 1, 0);
-    enemy.setVelocity(Phaser.Math.Between(-80, 80), this.st.speed);
+    enemy.setVelocity(Phaser.Math.Between(-80, 80), this.st!.speed);
     enemy.allowGravity = false;
     enemy.setVisible(true).setActive(true);
   }
 
   isTarget(enemy: Phaser.GameObjects.GameObject, keyCode: number, pressShift: boolean) {
+    // console.log('keyCode', keyCode);
+    console.log('enemy', enemy.name);
+
     return parseInt(enemy.name) === this.KeyPrc.downKeyCodeToAscii(keyCode, pressShift);
   }
 
   update() {
-    while (this.chrs!.countActive(true) < this.st.maxEnemy) {
+    if (this.st!.gameOver) {
+      return;
+    }
+    while (this.chrs!.countActive(true) < this.st!.maxEnemy) {
       this.createEnemy();
     }
   }
