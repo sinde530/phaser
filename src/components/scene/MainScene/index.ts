@@ -30,8 +30,7 @@ class MainScene extends Phaser.Scene {
   initStatus(): GameStatus {
     return {
       score: 0,
-      // speed: 20,
-      speed: 2000,
+      speed: 20,
       maxEnemy: 1,
       gameOver: false,
     };
