@@ -3,14 +3,16 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage":"https://sinde530.github.io/phaser/",
+  "homepage": "https://sinde530.github.io/phaser/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview --port 8080"
   },
   "dependencies": {
+    "@types/keymaster": "^1.6.30",
     "gh-pages": "^4.0.0",
+    "keymaster": "^1.6.2",
     "phaser": "^3.55.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

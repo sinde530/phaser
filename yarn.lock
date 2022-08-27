@@ -285,6 +285,11 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@types/keymaster@^1.6.30":
+  version "1.6.30"
+  resolved "https://registry.yarnpkg.com/@types/keymaster/-/keymaster-1.6.30.tgz#11c3d8b9cb05f207816b77b9621afc6ec8ad01be"
+  integrity sha512-mtL/NuDBX72zmyIa3cYHA1bQj1WAYlSC4eZcIQj+DHJkcRyTRF2XJXo7DBmkkY8TEq7XaAf7B8TGxs5PHhjRtw==
+
 "@types/prop-types@*":
   version "15.7.5"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.5.tgz#5f19d2b85a98e9558036f6a3cacc8819420f05cf"
@@ -749,6 +754,11 @@ jsonfile@^4.0.0:
   integrity sha512-m6F1R3z8jjlf2imQHS2Qez5sjKWQzbuuhuJ/FKYFRZvPE3PuHcSMVZzfsLhGVOkfd20obL5SWEBew5ShlquNxg==
   optionalDependencies:
     graceful-fs "^4.1.6"
+
+keymaster@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/keymaster/-/keymaster-1.6.2.tgz#e1ae54d0ea9488f9f60b66b668f02e9a1946c6eb"
+  integrity sha512-OvA/AALN8IDKKkTk2Z+bDrzs/SQao4lo/QPbwSdDvm+frxfiYiYCSn1aHFUypJY3SruAO1y/c771agBmTXqUtg==
 
 locate-path@^5.0.0:
   version "5.0.0"
