@@ -7,6 +7,8 @@ import imgLogo from '../../../assets/phaser-logo.png';
 import imgRed from '../../../assets/red.png';
 import imgBullet from '../../../assets/star.png';
 import imgSenkan from '../../../assets/war_senkan_man.png';
+import imgTitle from '../../../assets/title.png';
+import imgStart from '../../../assets/start_easy.png';
 
 import chr33 from '../../../assets/char/33.png';
 import chr35 from '../../../assets/char/35.png';
@@ -50,11 +52,12 @@ import chr123 from '../../../assets/char/123.png';
 import chr124 from '../../../assets/char/124.png';
 import chr125 from '../../../assets/char/125.png';
 import chr126 from '../../../assets/char/126.png';
+import TitleScene from '../scene/TitleScene';
 
 class ImgHolder {
   images: { [key: string]: string };
 
-  constructor(private scene: MainScene) {
+  constructor() {
     this.images = {
       sky: imgSky,
       wall: imgWall,
@@ -62,7 +65,7 @@ class ImgHolder {
       red: imgRed,
       line: imgLine,
       bullet: imgBullet,
-      senkan: imgSenkan,
+      // senkan: imgSenkan,
       33: chr33,
       34: chr34,
       35: chr35,
@@ -108,11 +111,17 @@ class ImgHolder {
     };
   }
 
-  load() {
+  loadMain(scene: MainScene) {
     Object.keys(this.images).forEach((key) => {
-      this.scene.load.image(key, this.images[key]);
-      console.log(Object.keys);
+      scene.load.image(key, this.images[key]);
     });
+    scene.load.spritesheet('senkan', imgSenkan, { frameWidth: 180, frameHeight: 140 });
+  }
+  loadTitle(scene: TitleScene) {
+    scene.load.image('sky', imgSky);
+    scene.load.image('line', imgLine);
+    scene.load.image('title', imgTitle);
+    scene.load.image('start', imgStart);
   }
 }
 
