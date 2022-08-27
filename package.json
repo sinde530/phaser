@@ -2,7 +2,8 @@
   "name": "phaser",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://sinde530.github.io/phaser/",
+  "type": "module",
+  "homepage":"https://sinde530.github.io/phaser/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
