@@ -8,23 +8,25 @@ interface GameStatus {
   score: number;
   speed: number;
   maxEnemy: number;
+  gameOver: boolean;
 }
 
 class MainScene extends Phaser.Scene {
   KeyPrc: KeyProcessor;
   images: ImgHolder;
   walls?: Phaser.Physics.Arcade.StaticGroup;
-  chrGroup?: Phaser.Physics.Arcade.Group;
+  // chrGroup?: Phaser.Physics.Arcade.Group;
   bullets?: Phaser.Physics.Arcade.Group;
   chrs?: Phaser.Physics.Arcade.Group;
-  senkan?: Phaser.Physics.Arcade.Image;
+  senkan?: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
+  line?: Phaser.Physics.Arcade.Image;
   st: GameStatus;
   labelScore?: Phaser.GameObjects.Text;
 
   constructor() {
     super({ key: 'mainscene' });
     this.KeyPrc = new KeyProcessor(this);
-    this.images = new ImgHolder(this);
+    this.images = new ImgHolder();
     this.st = this.initStatus();
   }
 
@@ -33,12 +35,13 @@ class MainScene extends Phaser.Scene {
       score: 0,
       speed: 20,
       maxEnemy: 1,
+      gameOver: false,
     };
   }
 
   preload() {
     // this.load.setBaseURL('https://labs.phaser.io');
-    this.images.load();
+    this.images.loadMain(this);
     this.walls = this.physics.add.staticGroup();
     this.chrs = this.physics.add.group();
     this.bullets = this.physics.add.group({ classType: Bullet, runChildUpdate: true });
@@ -54,6 +57,7 @@ class MainScene extends Phaser.Scene {
               if (enemy.active === true && bullet.active === true) {
                 enemy.destroy();
                 this.st.score += 10;
+                this.st.maxEnemy = Math.floor(this.st.score / 100) + 1;
                 this.labelScore!.setText(`Score: ${this.st.score}`);
               }
             });
@@ -65,8 +69,8 @@ class MainScene extends Phaser.Scene {
 
   create() {
     this.add.image(400, 300, 'sky');
-    this.add.image(400, 600, 'line');
-    this.senkan = this.physics.add.image(400, 550, 'senkan').setScale(0.7);
+    this.line = this.physics.add.image(400, 600, 'line');
+    this.senkan = this.physics.add.sprite(400, 550, 'senkan').setScale(0.7);
 
     this.walls!.create(-15, 300, 'wall');
     this.walls!.create(815, 300, 'wall');
@@ -78,10 +82,18 @@ class MainScene extends Phaser.Scene {
       fontFamily: 'Roboto',
     });
 
-    // while (this.chrs!.countActive(true) < 4) {
-    //   this.createEnemy();
-    // }
     this.physics.add.collider(this.chrs!, this.walls!);
+    this.physics.add.overlap(this.chrs!, this.line!, () => {
+      this.senkan?.anims.play('gameover');
+      this.st.gameOver = true;
+
+      this.physics.pause();
+    });
+    this.anims.create({
+      key: 'gameover',
+      frames: this.anims.generateFrameNumbers('senkan', { start: 0, end: 6 }),
+      frameRate: 15,
+    });
   }
 
   createEnemy() {
@@ -97,10 +109,16 @@ class MainScene extends Phaser.Scene {
   }
 
   isTarget(enemy: Phaser.GameObjects.GameObject, keyCode: number, pressShift: boolean) {
+    // console.log('keyCode', keyCode);
+    console.log('enemy', enemy.name);
+
     return parseInt(enemy.name) === this.KeyPrc.downKeyCodeToAscii(keyCode, pressShift);
   }
 
   update() {
+    if (this.st.gameOver) {
+      return;
+    }
     while (this.chrs!.countActive(true) < this.st.maxEnemy) {
       this.createEnemy();
     }
