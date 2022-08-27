@@ -5,6 +5,8 @@ import Phaser from 'phaser';
 import MainScene from './components/scene/MainScene';
 
 import './App.css';
+import TitleScene from './components/scene/TitleScene';
+import ImgHolder from './components/core/ImgHolder';
 
 function App() {
   useEffect(() => {
@@ -17,10 +19,12 @@ function App() {
         default: 'arcade',
         arcade: { gravity: { y: 0 } },
       },
-      scene: MainScene,
+      scene: [TitleScene, MainScene],
     };
-    console.log(config);
-    new Phaser.Game(config);
+    const game = new Phaser.Game(config);
+    game.scene.start('titlescene', { images: new ImgHolder() });
+    // console.log(images);
+    console.log(game);
   }, [0]);
   return <div id="phaser-game" />;
 }
