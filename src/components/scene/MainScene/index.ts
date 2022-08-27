@@ -83,8 +83,7 @@ class MainScene extends Phaser.Scene {
       fontSize: '15px',
       color: '#022',
       fontStyle: 'bold',
-      // 111
-      // fontFamily: 'Roboto',
+      fontFamily: 'Roboto',
     });
 
     this.physics.add.collider(this.chrs!, this.walls!);
@@ -103,19 +102,16 @@ class MainScene extends Phaser.Scene {
     this.st!.gameOver = true;
     this.time.delayedCall(1000, () => {
       this.add.image(400, 300, 'gameover');
-      console.log(this.add.image);
-
       this.add
         .text(385, 285, String(this.st!.score), {
           fontSize: '30px',
           fontStyle: 'bold',
           color: '#547EFF',
-          // 111
-          // fontFamily: 'roboto',
+          fontFamily: 'Roboto',
         })
         .setOrigin(0);
       this.add
-        .image(200, 400, 'button_retry')
+        .image(300, 400, 'button_retry')
         .setInteractive()
         .once('pointerup', () => {
           this.scene.restart();
