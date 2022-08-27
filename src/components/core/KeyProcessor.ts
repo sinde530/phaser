@@ -1,3 +1,4 @@
+import Phaser from 'phaser';
 import MainScene from '../scene/MainScene';
 
 const KEY_SHIFT = 16;
@@ -7,6 +8,7 @@ const WITH_SHIFT_KEYS = [
   '#',
   '$',
   '%',
+  '&',
   "'",
   '(',
   ')',
@@ -21,9 +23,8 @@ const WITH_SHIFT_KEYS = [
   '<',
   '>',
   '?',
-  '0',
+  '_',
 ];
-
 const NON_SHIFT_KEYS = [
   '0',
   '1',
@@ -115,7 +116,8 @@ class KeyProcessor {
 
   getRandomKey() {
     // RND 가 무엇?.. interferInRange?..
-    const keys = Phaser.Math.RND.integerInRange(1, 2) == 1 ? WITH_SHIFT_KEYS : NON_SHIFT_KEYS;
+    const keys = Phaser.Math.RND.pick([1, 2]) == 1 ? WITH_SHIFT_KEYS : NON_SHIFT_KEYS;
+
     return keys[Phaser.Math.RND.integerInRange(0, keys.length - 1)];
   }
 
