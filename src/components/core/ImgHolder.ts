@@ -3,14 +3,14 @@ import MainScene from '../scene/MainScene';
 import imgSky from '../../../assets/sky.png';
 import imgWall from '../../../assets/wall.png';
 import imgLine from '../../../assets/line.png';
-import imgLogo from '../../../assets/phaser-logo.png';
+import imgLogo from '../../../assets/phaser_logo.png';
 import imgRed from '../../../assets/red.png';
 import imgBullet from '../../../assets/star.png';
 import imgSenkan from '../../../assets/war_senkan_man.png';
 import imgTitle from '../../../assets/title.png';
 import imgStart from '../../../assets/start_easy.png';
-import imgButtonRetry from '../../../assets/button-retry.png';
-import imgButtonTitle from '../../../assets/button-title.png';
+import imgButtonRetry from '../../../assets/button_retry.png';
+import imgButtonTitle from '../../../assets/button_title.png';
 import imgGameOver from '../../../assets/gameover.png';
 
 import chr33 from '../../../assets/char/33.png';
@@ -55,6 +55,7 @@ import chr123 from '../../../assets/char/123.png';
 import chr124 from '../../../assets/char/124.png';
 import chr125 from '../../../assets/char/125.png';
 import chr126 from '../../../assets/char/126.png';
+
 import TitleScene from '../scene/TitleScene';
 
 class ImgHolder {
@@ -71,7 +72,6 @@ class ImgHolder {
       button_retry: imgButtonRetry,
       button_title: imgButtonTitle,
       gameover: imgGameOver,
-      // senkan: imgSenkan,
       33: chr33,
       34: chr34,
       35: chr35,
