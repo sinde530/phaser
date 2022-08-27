@@ -17,12 +17,12 @@
     "jsx": "react-jsx"
   },
   // "include": ["./src"],
-  // "references": [{ "path": "./tsconfig.node.json" }]
-  "include": ["./src"],
+  "include": ["src"],
   "typeRoots": [
     "./node_modules/phaser/types"
   ],
   "types": [
     "Phaser"
-  ]
+  ],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }
