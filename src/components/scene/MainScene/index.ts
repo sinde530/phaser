@@ -38,7 +38,6 @@ class MainScene extends Phaser.Scene {
 
   init(data: any) {
     this.images = data.images;
-    this.st!.speed = data.speed;
     console.log('data.images', data.images);
   }
 
